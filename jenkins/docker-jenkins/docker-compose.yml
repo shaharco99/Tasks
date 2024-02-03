@@ -1,0 +1,16 @@
+#rl -sO http://127.0.0.1:8080/jnlpJars/agent.jar
+#java -jar agent.jar -jnlpUrl http://127.0.0.1:8080/manage/computer/first%5Fnode/jenkins-agent.jnlp -secret 82008fc75fe55136a025599aaa3a46f5ea11cf89a4ac71b15f7e4b3c2fbf4275 -workDir "/home/shahar/Desktop/Devops"
+version: '3.8'
+services:
+  jenkins:
+    container_name: jenkins
+    restart: always
+    image: jenkins/jenkins:lts
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-home:/var/jenkins_home
+
+volumes:
+  jenkins-home:

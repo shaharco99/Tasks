@@ -1,0 +1,54 @@
+properties([
+githubProjectProperty(displayName: '', projectUrlStr: 'https://github.com/shaharco99/Devops/'),
+parameters([
+    string(defaultValue: 'latest', description: 'version of the grafana', name: 'version_grafana', trim: true),
+    string(defaultValue: 'latest', description: 'version of the prometheus', name: 'version_prometheus', trim: true)
+]),
+pipelineTriggers([githubPush()])])
+pipeline {
+agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: docker
+            image: shaharco1804/world_of_game
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+             - mountPath: /var/run/docker.sock
+               name: docker-sock
+          volumes:
+          - name: docker-sock
+            hostPath:
+              path: /var/run/docker.sock
+        '''
+    }
+  }
+tools {
+  'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker'
+  }
+    stages {
+        stage('build') {
+            environment {
+                GRAFANA_VERSION = '{version_grafana}'
+                PROMETHEUS_VERSION = '{version_prometheus}'
+            }
+
+            steps {
+                container('jnlp') {
+                    script {
+                        // Build Prometheus image
+                        sh 'docker build -t my-prometheus -f Dockerfile.prometheus .'
+
+                        // Build Grafana image
+                        sh 'docker build -t my-grafana -f Dockerfile.grafana .'
+                    }
+                }
+            }
+        }
+    }
+}
