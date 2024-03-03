@@ -8,10 +8,6 @@ ARG plugins='blueocean kubernetes ansible terraform docker-plugin locale configu
 ARG jenkins_url='192.168.49.2'
 ARG jenkins_port='32000'
 
-# Set environment variables
-ENV image_name=${image_name}
-ENV image_version=${image_version}
-
 # Use an the image from variables
 FROM ${image_name}:${image_version}
 

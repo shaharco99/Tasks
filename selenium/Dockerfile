@@ -3,9 +3,6 @@
 ARG image_name=selenium/standalone-chrome
 ARG image_version=108.0.5359.124
 
-# Set environment variables
-ENV image_name=${image_name}
-ENV image_version=${image_version}
 
 # Use an the image from variables
 FROM ${image_name}:${image_version}

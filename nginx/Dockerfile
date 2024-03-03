@@ -3,10 +3,6 @@
 ARG image_name=nginx
 ARG image_version=latest
 
-# Set environment variables
-ENV image_name=${image_name}
-ENV image_version=${image_version}
-
 # Use an the image from variables
 FROM ${image_name}:${image_version}
 
