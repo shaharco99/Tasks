@@ -1,15 +1,17 @@
-curl http://192.168.49.2:32000/jnlpJars/jenkins-cli.jar --output /opt/jenkins-cli.jar
-#waiting when jenkins will be up for download
-#while true; do
-#   sleep 10
-#   curl --fail http://192.168.49.2:32000/jnlpJars/jenkins-cli.jar --output /opt/jenkins-cli.jar && break
-# done
+#!/bin/bash
+# Update every Jenkins plugin that has an update available, then safe-restart.
+# Usage: JENKINS_URL=http://<host>:<port>/ JENKINS_AUTH=user:api-token ./jenkins_update.sh
+set -euo pipefail
+: "${JENKINS_URL:?set JENKINS_URL}"
+: "${JENKINS_AUTH:?set JENKINS_AUTH (user:api-token)}"
 
+curl -fsS "${JENKINS_URL}jnlpJars/jenkins-cli.jar" --output /opt/jenkins-cli.jar
+cli() { java -jar /opt/jenkins-cli.jar -s "$JENKINS_URL" -auth "$JENKINS_AUTH" "$@"; }
 
-UPDATE_LIST=$(java -jar /opt/jenkins-cli.jar -s http://192.168.49.2:32000/ -auth "admin:lPj9FKpusojI9ko1XYlG68" list-plugins | grep -e ')$' | awk '{ print $1 }' );
-if [ ! -z "${UPDATE_LIST}" ]; then
-echo Updating Jenkins Plugins: ${UPDATE_LIST};
-java -jar /opt/jenkins-cli.jar -s http://192.168.49.2:32000/ -auth "admin:lPj9FKpusojI9ko1XYlG68" install-plugin ${UPDATE_LIST};
-java -jar /opt/jenkins-cli.jar -s http://192.168.49.2:32000/ -auth "admin:lPj9FKpusojI9ko1XYlG68" safe-restart;
+UPDATE_LIST=$(cli list-plugins | grep -e ')$' | awk '{ print $1 }')
+if [ -n "${UPDATE_LIST}" ]; then
+    echo "Updating Jenkins plugins: ${UPDATE_LIST}"
+    # shellcheck disable=SC2086 # one argument per plugin
+    cli install-plugin ${UPDATE_LIST}
+    cli safe-restart
 fi
-
