@@ -13,8 +13,6 @@ the status column says what was checked in October 2026.
 | [`jenkins/jenkins-k8s`](jenkins/jenkins-k8s) | Jenkins on minikube: Deployment, NodePort Services, PV/PVC, RBAC, plus the same as a Helm chart | Manifests validate (kubeconform), chart lints |
 | [`jenkins/Jenkinsfile`](jenkins/Jenkinsfile) | Parameterised pipeline that runs `terraform apply`/`destroy` for an EC2 config ([Terraform repo](https://github.com/shaharco99/Terraform/tree/main/terraform-EC2)) with AWS keys from Jenkins credentials | Not run; uses a local path on the original machine |
 | [`jenkins/docker-jenkins`](jenkins/docker-jenkins) | Jenkins in Docker Compose, a custom Jenkins image with plugins, and a plugin-update script | Not verified |
-| [`grafana_piplane`](grafana_piplane) | Prometheus and Grafana config files and a Jenkinsfile | Incomplete: the Dockerfiles and compose file it references are not in the repo |
-| [`selenium`](selenium) | Selenium + Chrome image | Broken: the chromedriver download URL it uses no longer exists |
 | [`google_search`](google_search) | Prints the top Google results for a query | Not verified |
 | [`python`](python) | Short scripts: HTTP request, directory count, interest calculator | Not verified |
 
