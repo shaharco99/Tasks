@@ -10,7 +10,7 @@ FROM ${image_name}:${image_version}
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY ../../for_jobs /app
+COPY . /app
 
 EXPOSE 8080
 
